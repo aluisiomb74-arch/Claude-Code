@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  sq-docguard:
+    name: SQ DocGuard — typecheck & build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: sq-docguard
+    env:
+      # Valores fictícios: o build apenas empacota, não chama o Supabase.
+      VITE_SUPABASE_URL: https://example.supabase.co
+      VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_ci_dummy
+      VITE_SUPABASE_PROJECT_ID: ci-dummy
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Build
+        run: bun run build
