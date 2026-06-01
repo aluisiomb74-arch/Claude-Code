@@ -1,0 +1,13 @@
+node_modules
+dist
+.git
+.env
+.env.local
+*.log
+*.tsbuildinfo
+supabase/functions
+README.md
+PIPELINE.md
+LEIA-ME.md
+checklist-ti.md
+prompt-lovable.md
