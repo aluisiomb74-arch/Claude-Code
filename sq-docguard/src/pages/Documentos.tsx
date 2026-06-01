@@ -76,7 +76,15 @@ export function DocumentosPage() {
             <tbody className="divide-y divide-slate-100">
               {filtrados.map((d) => (
                 <tr key={d.id} className="hover:bg-slate-50">
-                  <td className="px-5 py-3 font-medium text-slate-800">{d.titulo}</td>
+                  <td className="px-5 py-3 font-medium text-slate-800">
+                    <Link
+                      to="/documentos/$id"
+                      params={{ id: d.id }}
+                      className="hover:text-brand hover:underline"
+                    >
+                      {d.titulo}
+                    </Link>
+                  </td>
                   <td className="px-5 py-3 text-slate-600">{d.tipos_documento?.nome ?? "—"}</td>
                   <td className="px-5 py-3 text-slate-600">{d.unidades?.nome ?? "—"}</td>
                   <td className="px-5 py-3 text-slate-600">{formatDate(d.data_vencimento)}</td>

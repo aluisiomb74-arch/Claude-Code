@@ -1,12 +1,23 @@
 import type { ReactNode } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { FileText, LayoutDashboard, LogOut, ShieldCheck } from "lucide-react";
+import {
+  Bell,
+  BarChart3,
+  FileText,
+  LayoutDashboard,
+  LogOut,
+  Settings,
+  ShieldCheck,
+} from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { Button } from "./ui";
 
 const nav = [
-  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { to: "/documentos", label: "Documentos", icon: FileText },
+  { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard, adminOnly: false },
+  { to: "/documentos", label: "Documentos", icon: FileText, adminOnly: false },
+  { to: "/alertas", label: "Alertas", icon: Bell, adminOnly: false },
+  { to: "/relatorios", label: "Relatórios", icon: BarChart3, adminOnly: false },
+  { to: "/admin", label: "Administração", icon: Settings, adminOnly: true },
 ];
 
 export function Shell({ children }: { children: ReactNode }) {
@@ -26,16 +37,18 @@ export function Shell({ children }: { children: ReactNode }) {
           <span className="text-lg font-bold text-slate-800">SQ DocGuard</span>
         </div>
         <nav className="flex-1 space-y-1 px-3">
-          {nav.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 [&.active]:bg-brand/10 [&.active]:text-brand"
-            >
-              <item.icon className="h-4 w-4" />
-              {item.label}
-            </Link>
-          ))}
+          {nav
+            .filter((item) => !item.adminOnly || isAdmin)
+            .map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 [&.active]:bg-brand/10 [&.active]:text-brand"
+              >
+                <item.icon className="h-4 w-4" />
+                {item.label}
+              </Link>
+            ))}
         </nav>
         <div className="border-t border-slate-200 p-4">
           <div className="mb-2 text-sm">

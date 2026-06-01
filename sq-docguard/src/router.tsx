@@ -12,6 +12,10 @@ import { LoginPage } from "@/pages/Login";
 import { DashboardPage } from "@/pages/Dashboard";
 import { DocumentosPage } from "@/pages/Documentos";
 import { DocumentoNovoPage } from "@/pages/DocumentoNovo";
+import { DocumentoDetalhePage } from "@/pages/DocumentoDetalhe";
+import { AlertasPage } from "@/pages/Alertas";
+import { RelatoriosPage } from "@/pages/Relatorios";
+import { AdminPage } from "@/pages/Admin";
 
 const rootRoute = createRootRoute({
   component: () => (
@@ -76,9 +80,41 @@ const documentoNovoRoute = createRoute({
   component: DocumentoNovoPage,
 });
 
+const documentoDetalheRoute = createRoute({
+  getParentRoute: () => authLayoutRoute,
+  path: "/documentos/$id",
+  component: DocumentoDetalhePage,
+});
+
+const alertasRoute = createRoute({
+  getParentRoute: () => authLayoutRoute,
+  path: "/alertas",
+  component: AlertasPage,
+});
+
+const relatoriosRoute = createRoute({
+  getParentRoute: () => authLayoutRoute,
+  path: "/relatorios",
+  component: RelatoriosPage,
+});
+
+const adminRoute = createRoute({
+  getParentRoute: () => authLayoutRoute,
+  path: "/admin",
+  component: AdminPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
-  authLayoutRoute.addChildren([dashboardRoute, documentosRoute, documentoNovoRoute]),
+  authLayoutRoute.addChildren([
+    dashboardRoute,
+    documentosRoute,
+    documentoNovoRoute,
+    documentoDetalheRoute,
+    alertasRoute,
+    relatoriosRoute,
+    adminRoute,
+  ]),
 ]);
 
 export const router = createRouter({ routeTree });
