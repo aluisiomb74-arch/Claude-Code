@@ -3,28 +3,36 @@
 Plataforma interna de controle de documentação regulatória com alertas de vencimento.
 Stack: **React 19 + TanStack Router + Vite + Supabase** (Tailwind CSS 4).
 
-## Estado atual — Fatia 1 (MVP)
+## Estado atual
 
 Implementado e funcional:
 
 - **Autenticação** Supabase (login + cadastro). Restrição de domínio `@sqquimica.com` e
   atribuição de papel (1º usuário = admin) são garantidas por triggers no banco.
 - **Dashboard** com KPIs por status e lista de próximos vencimentos (45 dias).
-- **Documentos**: listagem com busca e cadastro (tipo, unidade, datas, responsável,
-  órgão emissor condicional, sem-validade).
+- **Documentos**: listagem com busca, cadastro e tela de detalhe com **histórico de
+  versões** e **upload ao Storage** (bucket privado `documentos`).
+- **Alertas** in-app: central de notificações com marcar lido/todos e filtros.
+- **Relatórios**: exportação PDF e Excel (libs carregadas sob demanda).
+- **Administração** (admin): unidades, tipos de documento, configuração de dias de
+  alerta e papéis de usuário.
 - Status calculado no cliente espelhando a função SQL `calcular_status_documento`.
 
-Backend (Supabase) já provisionado: 14 tabelas com RLS, funções `security definer`,
-triggers de alerta/versão, bucket privado `documentos`, seed de tipos e unidade "Matriz".
+Backend (Supabase) provisionado e endurecido: 14 tabelas com RLS, funções
+`security definer`, triggers de alerta/versão, bucket privado, seed.
 
-### Próximas fatias (ver `LEIA-ME.md` e `checklist-ti.md`)
+**Pipeline de e-mail implantado** (ver `PIPELINE.md`): a integração Microsoft Graph
+foi portada para uma **Supabase Edge Function** (`processar-alertas`) agendada via
+**pg_cron** (diário). Falta apenas a TI cadastrar os secrets do Graph para o envio
+entrar em produção. Os arquivos originais TanStack Start ficam em
+`src/lib/email/*.server.ts` como referência.
 
-- Versões de documento (upload para o Storage) e tela de detalhe.
-- Central de alertas in-app.
-- Envio de e-mail via Microsoft Graph (arquivos em `src/lib/email/*.server.ts` e o
-  endpoint de cron em `src/routes/` — exigem migrar para TanStack **Start** / runtime de servidor).
-- Relatórios (PDF/Excel) e administração (unidades, tipos, usuários, configurações).
-- Fluxo de cadastro/reset por convite com token (substitui o signup direto da Fatia 1).
+### Próximas fatias (opcionais)
+
+- Fluxo de cadastro/reset por convite com token (substitui o signup direto), também
+  via Edge Function + Graph.
+- Edição/exclusão de documentos e gestão de vínculos usuário↔unidade na tela de admin.
+- Trilha de auditoria (`log_atividades`) exibida no admin.
 
 ## Rodar localmente
 
